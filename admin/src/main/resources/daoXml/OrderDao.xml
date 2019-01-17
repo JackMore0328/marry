@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.door.match.dao.OrderDao">
+
+    <sql id="baseOrder">
+		id,orderno,reguserid,createtime,pay,orderstatus,datastatus
+	</sql>
+
+
+    <select id="findSysOrderById" parameterType="java.lang.Long"
+            resultType="com.door.match.entity.SysOrder">
+        select
+        <include refid="baseOrder"></include>
+        from sys_order where id=#{id}
+    </select>
+
+
+    <select id="countSysOrder" resultType="java.lang.Long" parameterType="com.door.match.entity.SysOrder">
+        select IFNULL(count(a.id),0) counts
+        from sys_order a
+        left join reg_user b
+        on a.reguserid=b.id
+        where 1=1
+        <if test="name!=null">
+            and b.name like concat('%',#{name},'%')
+        </if>
+        <if test="createTime!=null">
+            and a.createTime between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
+        </if>
+    </select>
+
+
+    <select id="listSysOrder" parameterType="com.door.match.entity.SysOrder"
+            resultType="com.door.match.entity.SysOrder">
+        select
+        a.id,
+        b.name,
+        a.orderno,
+        a.reguserid,
+        a.createtime,
+        a.pay,
+        a.orderstatus
+        from sys_order a
+        left join reg_user b
+        on a.reguserid=b.id
+        where 1=1
+        <if test="name!=null">
+            and b.name like concat('%',#{name},'%')
+        </if>
+        <if test="createTime!=null">
+            and a.createTime between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
+        </if>
+        limit #{startNo},#{pageSize}
+    </select>
+
+</mapper>
