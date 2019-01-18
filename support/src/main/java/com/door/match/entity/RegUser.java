@@ -39,7 +39,8 @@ public class RegUser extends PersistentObject {
     private Date createTime;
     private Date modifyTime;
     private Integer dataStatus;
-
+    private String openid;
+    private String code;
     private RegUserMapping regUserMapping;
 
 

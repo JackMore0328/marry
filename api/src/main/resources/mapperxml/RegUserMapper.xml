@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.door.match.mapper.RegUserMapper">
+
+    <select id="selectUserByOpenid" parameterType="java.lang.String" resultType="RegUser">
+        SELECT * FROM reg_user WHERE openid =#{openid}
+    </select>
+    <insert id="insertUser" parameterType="RegUser">
+        insert into reg_user(openid) values(#{openid})
+    </insert>
+</mapper>
