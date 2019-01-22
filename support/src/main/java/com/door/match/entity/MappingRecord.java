@@ -27,5 +27,6 @@ public class MappingRecord extends PersistentObject {
     private Date createTime;
     private Integer dataStatus;
     private Long mappingCount;
+    private Integer matchingdegree;
 
 }
