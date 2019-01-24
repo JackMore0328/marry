@@ -30,16 +30,19 @@ public class RegUserMapping extends PersistentObject {
     private String viewOfFuture;
     private Integer sex2;
     private String address2;
+    private Integer age_rank_id;
     private Integer height2;
     private Integer weight2;
     private Integer income2;
-    private String profession2;
-    private Integer education2;
+    private Integer profession2;
+    private String education2;
     private Integer married2;
     private Integer house2;
     private Integer car2;
     private Date createTime;
     private Date modifyTime;
     private Integer dataStatus;
+    private Integer heightmi;
+    private Integer heightmx;
 
 }

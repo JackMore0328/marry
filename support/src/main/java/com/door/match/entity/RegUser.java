@@ -32,8 +32,8 @@ public class RegUser extends PersistentObject {
     private Integer income;
     private String logo;
     private String img;
-    private String profession;
-    private Integer education;
+    private Integer profession;
+    private String education;
     private Integer married;
     private Integer house;
     private Integer car;

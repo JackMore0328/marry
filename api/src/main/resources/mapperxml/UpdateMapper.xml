@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.door.match.mapper.UpdateMapper">
+    <select id="selectByUser" parameterType="string" resultType="ReqData2">
+        SELECT * FROM reg_user LEFT JOIN reg_user_mapping ON reg_user_mapping.reguserid=reg_user.id LEFT JOIN age_rank ON reg_user_mapping.age_rank_id=age_rank.id LEFT JOIN salary_rank AS s1 ON s1.id=reg_user.income LEFT JOIN salary_rank AS s2 ON s2.id=reg_user_mapping.income2 WHERE reg_user.openid=#{openid}
+    </select>
+    <select id="selectUserId" parameterType="string" resultType="long">
+        SELECT id FROM reg_user WHERE openid=#{openid}
+    </select>
+    <update id="updateUser" parameterType="ReqData2" >
+        update reg_user
+         set
+           `name`=#{name },
+           logo=#{logo},
+           birth=#{birth},
+           sex=#{sex},
+           height=#{height},
+           address=#{address},
+           income=#{income},
+           profession=#{profession},
+           education=#{education},
+           married=#{married},
+           house=#{house},
+           car=#{car},
+           datastatus=#{datastatus}
+           where openid=#{openid}
+    </update>
+    <update id="updateUserMapping" parameterType="ReqData2">
+        update reg_user_mapping
+          set
+            contact=#{contact},
+            selfidea=#{selfidea},
+            viewofmarriage=#{viewofmarriage},
+            viewofconsume=#{viewofconsume},
+            viewoffuture=#{viewoffuture},
+            age_rank_id=#{age_rank_id},
+            heightmi=#{heightmi},
+            heightmx=#{heightmx},
+            address2=#{address2},
+            income2=#{income2},
+            education2=#{education2},
+            married2=#{married2},
+            house2=#{house2},
+            car2=#{car2},
+            datastatus=#{datastatus}
+          where reguserid=#{id}
+    </update>
+    <select id="SelectUserImg" parameterType="long" resultType="UserImg">
+        select id,reg_id,user_img from reg_user_img where reg_id=#{reg_id}
+    </select>
+    <insert id="addImg" parameterType="UserImg">
+        insert into reg_user_img(reg_id,user_img) values (#{reg_id},#{user_img})
+    </insert>
+    <select id="selectAge" parameterType="string" resultType="integer">
+        select TIMESTAMPDIFF(year,str_to_date(ru.birth, '%Y-%m-%d %H'),now()) age  from reg_user ru WHERE openid=#{openid}
+    </select>
+</mapper>
