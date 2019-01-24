@@ -10,7 +10,7 @@ public interface RegUserMapper {
     RegUser selectUserByOpenid(String openid);
     int insertUser(RegUser regUser);
 
-    int selectCountByRuserid(Long id);
+    int selectISOKByRuserid(Long id);
 
     ArrayList<SalaryRank> reqSalarkRank();
 

@@ -58,28 +58,27 @@ public class MiniLoginService {
     private HashMap<String, Object> joinUser( String loginjson,RegUser userinfo){
         JSONObject json = JSONObject.parseObject(loginjson);
         String openid = json.getString("openid");
+        HashMap<String, Object> map=null;
        if (openid!=null&&!openid.trim().equals("")) {
            RegUser user = regUserMapper.selectUserByOpenid(openid);
-           int count = 0;
-           HashMap<String, Object> map=null;
            if (user == null) {
                userinfo.setOpenid(openid);
-               count = regUserMapper.insertUser(userinfo);
+               int count = regUserMapper.insertUser(userinfo);
                if(count==1){
                    map=new HashMap<String, Object>();
                    map.put("count",0);
                    map.put("openid",openid);
                }
            }else{
-               count=regUserMapper.selectCountByRuserid(user.getId());
-               map=new HashMap<String, Object>();
-               map.put("count",count);
-               map.put("openid",openid);
+               Long umid=regUserMapper.selectRUMByOpenid(openid);
+               if(umid.longValue()>0){
+                   map=new HashMap<String, Object>();
+                   map.put("count",umid);
+                   map.put("openid",openid);
+               }
            }
-           return map;
-
        }
-        return null;
+        return map;
 
     }
     @Transactional
@@ -156,4 +155,5 @@ public class MiniLoginService {
        return  false;
 
     }
+
 }

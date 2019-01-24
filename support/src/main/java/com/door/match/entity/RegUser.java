@@ -42,6 +42,7 @@ public class RegUser extends PersistentObject {
     private Date modifyTime;
     private Integer dataStatus;
     private String openid;
+    private Integer firstinfostatu;
     private RegUserMapping regUserMapping;
     //以下封装请求参数
     private String nickName;
