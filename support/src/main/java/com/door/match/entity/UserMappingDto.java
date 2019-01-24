@@ -46,6 +46,7 @@ public class UserMappingDto extends PersistentObject {
     private String viewOfConsume;
     private String viewOfFuture;
     private Integer sex2;
+    private Integer ageRankId;
     private String address2;
     private Integer height2;
     private Integer weight2;
