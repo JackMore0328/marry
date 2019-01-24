@@ -5,12 +5,9 @@
  * Description: 注册用户
  */
 package com.door.match.entity;
-
-import com.door.match.base.PersistentObject;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author dubin
@@ -72,5 +69,9 @@ public class ReqData implements Serializable {
 
     private Integer partnersalaryid;
 
+    private Integer currentPage;
+    private Integer pagesize;
+    private Long start;
+    private Long end;
 
 }

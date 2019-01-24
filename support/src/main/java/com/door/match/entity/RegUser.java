@@ -32,8 +32,8 @@ public class RegUser extends PersistentObject {
     private Integer income;
     private String logo;
     private String img;
-    private String profession;
-    private Integer education;
+    private Integer profession;
+    private String education;
     private Integer married;
     private Integer house;
     private Integer car;
@@ -42,6 +42,7 @@ public class RegUser extends PersistentObject {
     private Date modifyTime;
     private Integer dataStatus;
     private String openid;
+    private Integer firstinfostatu;
     private RegUserMapping regUserMapping;
     //以下封装请求参数
     private String nickName;

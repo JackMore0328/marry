@@ -20,13 +20,14 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
-public class MappingRecord extends PersistentObject {
-    private Long id;
-    private Long reguserid;
-    private Long mappingid;
-    private Date createtime;
-    private Integer datastatus;
-    private Long mappingcount;
+public class MapperRecordInfo extends MappingRecord {
+    private String img;
+    private Integer sex;
+    private Integer age;
+    private Integer car;
+    private Integer house;
+    private Integer height;
+    private String selfidea;
     private Integer matchingdegree;
 
 }

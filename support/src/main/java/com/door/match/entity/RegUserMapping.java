@@ -20,26 +20,29 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
-public class RegUserMapping extends PersistentObject {
+public class RegUserMapping extends PersistentObject  {
     private Long id;
-    private Long regUserId;
+    private Long reguserid;
     private String contact;
-    private String selfIdea;
-    private String viewOfMarriage;
-    private String viewOfConsume;
-    private String viewOfFuture;
+    private String selfidea;
+    private String viewofmarriage;
+    private String viewofconsume;
+    private String viewoffuture;
     private Integer sex2;
+    private Integer agerankid;
     private String address2;
     private Integer height2;
     private Integer weight2;
     private Integer income2;
-    private String profession2;
-    private Integer education2;
+    private Integer profession2;
+    private String education2;
     private Integer married2;
     private Integer house2;
     private Integer car2;
-    private Date createTime;
-    private Date modifyTime;
-    private Integer dataStatus;
+    private Date createtime;
+    private Date modifytime;
+    private Integer datastatus;
+    private Integer heightmx;
+    private Integer heightmi;
 
 }
