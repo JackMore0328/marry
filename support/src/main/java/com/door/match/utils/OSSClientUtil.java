@@ -3,7 +3,6 @@ package com.door.match.utils;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
-import com.fndsoft.bcis.exception.ImgException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
@@ -19,8 +18,9 @@ public class OSSClientUtil {
     // endpoint以杭州为例，其它region请按实际情况填写
     private String endpoint = "您的endpoint";
     // accessKey
-    private String accessKeyId = "您的accessKeyId";
-    private String accessKeySecret = "您的accessKeySecret";
+    private String accessKeyId = "LTAI0lB3fGOLrRYj";
+
+    private String accessKeySecret = "06eNHBYAwbCPwYICeQ378Z55yn4t7x";
     //空间
     private String bucketName = "bcis";
     //文件存储目录
@@ -59,14 +59,14 @@ public class OSSClientUtil {
             String[] split = url.split("/");
             this.uploadFile2OSS(fin, split[split.length - 1]);
         } catch (FileNotFoundException e) {
-            throw new ImgException("图片上传失败");
+            throw new RuntimeException("图片上传失败");
         }
     }
 
 
     public String uploadImg2Oss(MultipartFile file) {
         if (file.getSize() > 1024 * 1024) {
-            throw new ImgException("上传图片大小不能超过1M！");
+            throw new RuntimeException("上传图片大小不能超过1M！");
         }
         String originalFilename = file.getOriginalFilename();
         String substring = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
@@ -77,7 +77,7 @@ public class OSSClientUtil {
             this.uploadFile2OSS(inputStream, name);
             return name;
         } catch (Exception e) {
-            throw new ImgException("图片上传失败");
+            throw new RuntimeException("图片上传失败");
         }
     }
 
