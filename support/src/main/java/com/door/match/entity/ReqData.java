@@ -73,5 +73,8 @@ public class ReqData implements Serializable {
     private Integer pagesize;
     private Long start;
     private Long end;
+    private Long mid;
+    private Long imgid;
+
 
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UserImg {
     private Integer id;
-    private Long reg_id;
+    private Long regid;
     private String openid;
-    private String user_img;
+    private String userimg;
 }

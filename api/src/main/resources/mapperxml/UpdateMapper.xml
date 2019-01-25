@@ -46,12 +46,100 @@
           where reguserid=#{id}
     </update>
     <select id="SelectUserImg" parameterType="long" resultType="UserImg">
-        select id,reg_id,user_img from reg_user_img where reg_id=#{reg_id}
+        select id,reg_id as regid,user_img as userimg from reg_user_img where reg_id=#{reg_id} order by id desc limit 5
+    </select>
+    <select id="SelectUserImgByOid" parameterType="ReqData" resultType="UserImg">
+        select id,reg_id as regid,user_img as userimg from reg_user_img where reg_id=(select id from reg_user where openid=#{openid}) order by id desc limit 5
     </select>
     <insert id="addImg" parameterType="UserImg">
-        insert into reg_user_img(reg_id,user_img) values (#{reg_id},#{user_img})
+        insert into reg_user_img(reg_id,user_img) values (#{regid},#{userimg})
     </insert>
     <select id="selectAge" parameterType="string" resultType="integer">
         select TIMESTAMPDIFF(year,str_to_date(ru.birth, '%Y-%m-%d %H'),now()) age  from reg_user ru WHERE openid=#{openid}
     </select>
+    <select id="getmapperinfo" parameterType="ReqData" resultType="MapperRecordInfo">
+        select  mr.id,mr.reguserid,mr.mappingid,mr.matchingdegree,rum.address,
+                rum.`name`,rum.sex,rum.car,rum.house,rum.height,rum.education,rumm.contact,rum.married,
+                (select sr1.salary from salary_rank sr1 where sr1.id=rum.income) as salarystring,rumm.income2,
+                rum.logo as img,TIMESTAMPDIFF(year,str_to_date(rum.birth, '%Y-%m-%d %H'),now()) as age,
+                rumm.selfidea,rumm.viewofmarriage,rumm.viewofconsume,rumm.viewoffuture,rumm.age_rank_id as agerankid,
+                (select sr.salary from salary_rank sr where sr.id=rumm.income2) as salarystring2,
+                (select ar.agerank from age_rank ar where ar.id=rumm.age_rank_id) as agestirng,
+                rumm.address2,rumm.education2,rumm.married2,rumm.house2,rumm.car2,rumm.heightmi,rumm.heightmx
+        from mapping_record mr
+        left join reg_user rum on rum.id=mr.mappingid
+        left join reg_user_mapping rumm on rumm.reguserid=rum.id
+        where mr.reguserid=(select ru.id from reg_user ru where ru.openid=#{openid})
+        and mr.id in (select max(mr1.id)from mapping_record mr1 GROUP BY mr1.reguserid,mr1.mappingid)
+        and mr.mappingid=#{mid}
+    </select>
+    <select id="getuserinfo" parameterType="ReqData" resultType="MapperRecordInfo">
+        select rum.address, rum.`name`,rum.sex,rum.car,rum.house,rum.height,rum.education,rumm.contact,rum.married,
+                (select sr1.salary from salary_rank sr1 where sr1.id=rum.income) as salarystring,rumm.income2,
+                rum.logo as img,TIMESTAMPDIFF(year,str_to_date(rum.birth, '%Y-%m-%d %H'),now()) as age,
+                rumm.selfidea,rumm.viewofmarriage,rumm.viewofconsume,rumm.viewoffuture,rumm.age_rank_id as agerankid,
+                (select sr.salary from salary_rank sr where sr.id=rumm.income2) as salarystring2,
+                (select ar.agerank from age_rank ar where ar.id=rumm.age_rank_id) as agestirng,
+                rumm.address2,rumm.education2,rumm.married2,rumm.house2,rumm.car2,rumm.heightmi,rumm.heightmx,
+                concat((select `name` from profession where id =p.parentid ),p.name)as profession,rum.profession as professionid
+        from  reg_user rum
+        left join reg_user_mapping rumm on rumm.reguserid=rum.id
+        left join profession p on p.id = rum.profession
+        where rum.openid=#{openid}
+    </select>
+    <delete id="deletimg" parameterType="ReqData">
+        delete from  reg_user_img  where id=#{imgid}
+    </delete>
+    <select id="partnermacdeg" parameterType="MapperRecordInfo" resultType="java.lang.Integer">
+        select ROUND(count(rr.id)*100/8) as matchingdegree
+        from (
+        select ru1.id from reg_user ru1
+        where ru1.id =#{reguserid} and ru1.sex != #{sex}
+        and ru1.address like CONCAT(#{address2}, '%')
+        union ALL
+        select ru2.id from reg_user ru2
+        where ru2.id =#{reguserid} and ru2.sex != #{sex}
+        and ru2.income = #{income2}
+        union ALL
+        select ru3.id from reg_user ru3
+        where  ru3.id =#{reguserid} and ru3.sex != #{sex}
+        and ru3.birth >(
+            select DATE_FORMAT(DATE_SUB(NOW(), interval (select ar.maxage from age_rank ar where ar.id =#{agerankid})
+            year), "%Y-%m-%d") from dual)
+        and ru3.birth <![CDATA[ < ]]>    (
+            select DATE_FORMAT(DATE_SUB(NOW(), interval (select ar.minage from age_rank ar where ar.id =#{agerankid})
+            year), "%Y-%m-%d") from dual)
+        union ALL
+        select ru4.id from reg_user ru4
+        where  ru4.id =#{reguserid} and ru4.sex != #{sex}
+        <if test="education2!= null and education2 !='不限'">
+            and ru4.education=#{education2}
+        </if>
+        union ALL
+        select ru5.id from reg_user ru5
+        where ru5.id =#{reguserid} and ru5.sex != #{sex}
+        <if test="married2!=null and married2==0">
+            and ru5.married=1
+        </if>
+        union ALL
+        select  ru6.id from reg_user ru6
+        where ru6.id =#{reguserid} and ru6.sex !=#{sex}
+        <if test="house2 != null and house2 == 0">
+            and
+            ru6.house=1
+        </if>
+        union ALL
+        select ru7.id from reg_user ru7
+        where  ru7.id =#{reguserid} and ru7.sex != #{sex}
+        <if test="car2 != null and car2 == 0">
+            and ru7.car2=1
+        </if>
+        union ALL
+        select  ru8.id from reg_user ru8
+        where  ru8.id =#{reguserid} and ru8.sex !=#{sex}
+        and ru8.height >= #{heightmi}
+        and ru8.height <![CDATA[ <= ]]>  #{heightmx}
+        ) rr group by rr.id
+    </select>
+
 </mapper>

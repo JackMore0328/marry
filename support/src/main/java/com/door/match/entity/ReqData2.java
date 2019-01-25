@@ -7,6 +7,7 @@
 package com.door.match.entity;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -76,6 +77,6 @@ public class ReqData2 implements Serializable {
 
 
     private Integer datastatus;//数据状态
-
+    private MultipartFile file;
 
 }

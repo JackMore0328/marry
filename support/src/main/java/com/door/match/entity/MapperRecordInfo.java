@@ -27,7 +27,30 @@ public class MapperRecordInfo extends MappingRecord {
     private Integer car;
     private Integer house;
     private Integer height;
+    private String contact;
+    private String viewofmarriage;
+    private String viewofconsume;
+    private String viewoffuture;
     private String selfidea;
+    private String salarystring;
+    private String salarystring2;
+    private Integer income2;
     private Integer matchingdegree;
+    private Integer partnermacdeg;
+    private Integer agerankid;
+
+    private String  agestirng;
+    private String address2;
+    private String address;
+    private Integer professionid;
+    private String profession;
+    private String education2;
+    private String education;
+    private Integer married2;
+    private Integer married;
+    private Integer house2;
+    private Integer car2;
+    private Integer heightmx;
+    private Integer heightmi;
 
 }

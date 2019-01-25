@@ -5,6 +5,7 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.Random;
-
+@Component
 public class OSSClientUtil {
     Log log = LogFactory.getLog(OSSClientUtil.class);
     // endpoint以杭州为例，其它region请按实际情况填写
