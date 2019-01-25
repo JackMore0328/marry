@@ -13,19 +13,20 @@ import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.Random;
+
 @Component
 public class OSSClientUtil {
     Log log = LogFactory.getLog(OSSClientUtil.class);
     // endpoint以杭州为例，其它region请按实际情况填写
-    private String endpoint = "您的endpoint";
+    private String endpoint = "oss-cn-hangzhou.aliyuncs.com";
     // accessKey
     private String accessKeyId = "LTAI0lB3fGOLrRYj";
 
     private String accessKeySecret = "06eNHBYAwbCPwYICeQ378Z55yn4t7x";
     //空间
-    private String bucketName = "bcis";
+    private String bucketName = "regusrimage";
     //文件存储目录
-    private String filedir = "data/";
+    private String filedir = "userimage/";
 
     private OSSClient ossClient;
 
