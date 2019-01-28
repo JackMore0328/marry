@@ -1,8 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.door.match.mapper.UpdateMapper">
+    <resultMap id="BaseResultMap" type="PayPO" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+        <result column="transcation_id" property="transcationId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="flag" property="flag" jdbcType="INTEGER" />
+        <result column="way" property="way" jdbcType="INTEGER" />
+        <result column="money" property="money" jdbcType="DECIMAL" />
+        <result column="true_money" property="trueMoney" jdbcType="DECIMAL" />
+        <result column="extra" property="extra" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="notify_at" property="notifyAt" jdbcType="TIMESTAMP" />
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, pay_no, transcation_id, user_id, flag, way, money, true_money, extra, status,
+        notify_at, created_at, updated_at
+     </sql>
+    <sql id="Base_Sql_Where">
+        <where>
+            1=1
+            <if test="id != null">
+                and id=#{id, jdbcType=INTEGER}
+            </if>
+            <if test="user_id != null">
+                and user_id=#{user_id, jdbcType=INTEGER}
+            </if>
+            <if test="flag != null">
+                and flag=#{flag, jdbcType=INTEGER}
+            </if>
+            <if test="way != null">
+                and way=#{way, jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status=#{status, jdbcType=INTEGER}
+            </if>
+            <if test="pay_no != null and pay_no != ''">
+                and pay_no=#{pay_no,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
     <select id="selectByUser" parameterType="string" resultType="ReqData2">
-        SELECT * FROM reg_user LEFT JOIN reg_user_mapping ON reg_user_mapping.reguserid=reg_user.id LEFT JOIN age_rank ON reg_user_mapping.age_rank_id=age_rank.id LEFT JOIN salary_rank AS s1 ON s1.id=reg_user.income LEFT JOIN salary_rank AS s2 ON s2.id=reg_user_mapping.income2 WHERE reg_user.openid=#{openid}
+        SELECT *,age_rank_id as agerankid FROM reg_user LEFT JOIN reg_user_mapping ON reg_user_mapping.reguserid=reg_user.id LEFT JOIN age_rank ON reg_user_mapping.age_rank_id=age_rank.id LEFT JOIN salary_rank AS s1 ON s1.id=reg_user.income LEFT JOIN salary_rank AS s2 ON s2.id=reg_user_mapping.income2 WHERE reg_user.openid=#{openid}
     </select>
     <select id="selectUserId" parameterType="string" resultType="long">
         SELECT id FROM reg_user WHERE openid=#{openid}
@@ -22,7 +64,7 @@
            married=#{married},
            house=#{house},
            car=#{car},
-           datastatus=#{datastatus}
+           datastatus=1
            where openid=#{openid}
     </update>
     <update id="updateUserMapping" parameterType="ReqData2">
@@ -33,7 +75,7 @@
             viewofmarriage=#{viewofmarriage},
             viewofconsume=#{viewofconsume},
             viewoffuture=#{viewoffuture},
-            age_rank_id=#{age_rank_id},
+            age_rank_id=#{agerankid},
             heightmi=#{heightmi},
             heightmx=#{heightmx},
             address2=#{address2},
@@ -42,7 +84,7 @@
             married2=#{married2},
             house2=#{house2},
             car2=#{car2},
-            datastatus=#{datastatus}
+            datastatus=1
           where reguserid=#{id}
     </update>
     <select id="SelectUserImg" parameterType="long" resultType="UserImg">
@@ -141,5 +183,116 @@
         and ru8.height <![CDATA[ <= ]]>  #{heightmx}
         ) rr group by rr.id
     </select>
-
+    <insert id="insertSelective" parameterType="PayPO" >
+        insert into pay
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="payNo != null" >
+                pay_no,
+            </if>
+            <if test="transcationId != null" >
+                transcation_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="flag != null" >
+                flag,
+            </if>
+            <if test="way != null" >
+                way,
+            </if>
+            <if test="money != null" >
+                money,
+            </if>
+            <if test="trueMoney != null" >
+                true_money,
+            </if>
+            <if test="extra != null" >
+                extra,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="notifyAt != null" >
+                notify_at,
+            </if>
+            <if test="createdAt != null" >
+                created_at,
+            </if>
+            <if test="updatedAt != null" >
+                updated_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="payNo != null" >
+                #{payNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transcationId != null" >
+                #{transcationId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="flag != null" >
+                #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="way != null" >
+                #{way,jdbcType=INTEGER},
+            </if>
+            <if test="money != null" >
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="trueMoney != null" >
+                #{trueMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="extra != null" >
+                #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notifyAt != null" >
+                #{notifyAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdAt != null" >
+                #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null" >
+                #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectSelectiveOne" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from pay <include refid="Base_Sql_Where" />
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="map" >
+        update pay
+        <set >
+            <if test="transcationId != null" >
+                transcation_id = #{transcationId,jdbcType=VARCHAR},
+            </if>
+            <if test="extra != null" >
+                extra = #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notifyAt != null" >
+                notify_at = #{notifyAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null" >
+                updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="true_money != null">
+                true_money = #{true_money,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where pay_no = #{pay_no,jdbcType=VARCHAR}
+    </update>
 </mapper>

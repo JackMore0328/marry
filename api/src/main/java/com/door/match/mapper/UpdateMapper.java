@@ -1,12 +1,10 @@
 package com.door.match.mapper;
 
-import com.door.match.entity.MapperRecordInfo;
-import com.door.match.entity.ReqData;
-import com.door.match.entity.ReqData2;
-import com.door.match.entity.UserImg;
+import com.door.match.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 @Mapper
@@ -27,4 +25,11 @@ public interface UpdateMapper {
     ArrayList<UserImg> SelectUserImgByOid(ReqData imgid);
 
     MapperRecordInfo getuserinfo(ReqData oid);
+
+    int insertSelective(PayPO pay);
+
+    PayPO selectSelectiveOne(Map<String,Object> paramMap);
+
+
+    int updateByPrimaryKeySelective(Map<String,Object> paramMap);
 }

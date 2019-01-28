@@ -13,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +41,16 @@ public class MiniUpdateController {
 
 //    修改资料
     @PostMapping("/update")
-    public Integer update(@RequestBody ReqData2 reqData){
+    public Integer update( ReqData2 reqData){
         System.out.println(reqData);
         Integer num = miniUpdateService.update(reqData);
+        return num;
+    }
+//    修改资料
+    @PostMapping("/updatenoimg")
+    public Integer updatenoimg( @RequestBody ReqData2 reqData){
+        System.out.println(reqData);
+        Integer num = miniUpdateService.updatenoimg(reqData);
         return num;
     }
 
@@ -123,6 +132,36 @@ public class MiniUpdateController {
             return new ResultDto<ArrayList>(ResultDto.CODE_BUZ_ERROR, e.getLocalizedMessage(), null);
         }
     }
+    @PostMapping("/rechargeapply")
+    public ResultDto<Map> rechargeapply(@RequestBody ReqData imgid){
+        try {
+            Map imgList = miniUpdateService.rechargeapply(imgid);
+            if(imgList!=null){
+                return new ResultDto<Map>(ResultDto.CODE_SUCC, "预支付成功", imgList);
+            }else{
+                return new ResultDto<Map>(ResultDto.CODE_AUTH_ERROR, "预支付失败", null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("预支付失败" + e.getLocalizedMessage());
+            return new ResultDto<Map>(ResultDto.CODE_BUZ_ERROR, e.getLocalizedMessage(), null);
+        }
+    }
+ @PostMapping("/orderquery")
+    public ResultDto<Integer> orderquery(@RequestBody ReqData imgid){
+        try {
+            Integer imgList = miniUpdateService.orderquery(imgid.getOutTradeNo());
+            if(imgList!=null){
+                return new ResultDto<Integer>(ResultDto.CODE_SUCC, "支付状态更新", imgList);
+            }else{
+                return new ResultDto<Integer>(ResultDto.CODE_AUTH_ERROR, "支付状态更新", null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("预支付失败" + e.getLocalizedMessage());
+            return new ResultDto<Integer>(ResultDto.CODE_BUZ_ERROR, e.getLocalizedMessage(), null);
+        }
+    }
 
     /**
      * @Author dubin
@@ -135,5 +174,9 @@ public class MiniUpdateController {
     public Integer addImg(ReqData2 reqData2){
         Integer num = miniUpdateService.addImg(reqData2);
         return num;
+    }
+    @RequestMapping("/callbackUnifiedorder")
+    public String callbackUnifiedorder(HttpServletRequest request) {
+        return miniUpdateService.callbackUnifiedorderService(request);
     }
 }

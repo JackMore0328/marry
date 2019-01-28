@@ -56,3 +56,9 @@ wx:
     appid: wx0d4b32bb35f376e4
 #小程序secret
     secret: 089cfb98886f1b96295b228800b9d6f5
+    #回调域名
+    callbackip: http://dubindev.nat100.top
+     #商户号
+    mchid: 1524818501
+     #微信支付key
+    key: fxAA3l43LmYz0Vdym58nD5wITClJBmxo

@@ -34,6 +34,7 @@ public class ReqData2 implements Serializable {
     private Integer income;//自己年收入id
     private String salary;//自己年收入范围
     private Integer profession; //自己职业
+    private String professionstr; //自己职业
     private String education;//自己的学历
     private Integer married;//感情状况
     private Integer house;//是否购房
@@ -57,6 +58,7 @@ public class ReqData2 implements Serializable {
 
     //对方情况
     private Integer age_rank_id;  //对方年龄范围id
+    private Integer agerankid;  //对方年龄范围id
     private String agerank;//对方年龄范围
     private Integer heightmi;  //对方身高最小值
     private Integer heightmx;  //对方身高最大值

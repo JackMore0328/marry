@@ -8,6 +8,7 @@ package com.door.match.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @Author dubin
@@ -24,6 +25,8 @@ public class ReqData implements Serializable {
     private String address;
     private String birth;
     private String address2;
+    private BigDecimal money;
+    private String outTradeNo;
 
     //个人情况
     private String province;
