@@ -3,52 +3,52 @@
 <mapper namespace="com.door.match.dao.OrderDao">
 
     <sql id="baseOrder">
-		id,orderno,reguserid,createtime,pay,orderstatus,datastatus
+		id,pay_no,transcation_id,user_id,way,flag,money,true_money
 	</sql>
 
 
     <select id="findSysOrderById" parameterType="java.lang.Long"
-            resultType="com.door.match.entity.SysOrder">
+            resultType="com.door.match.entity.PayPO">
         select
         <include refid="baseOrder"></include>
-        from sys_order where id=#{id}
+        from pay where id=#{id}
     </select>
 
 
-    <select id="countSysOrder" resultType="java.lang.Long" parameterType="com.door.match.entity.SysOrder">
+    <select id="countSysOrder" resultType="java.lang.Long" parameterType="com.door.match.entity.PayPO">
         select IFNULL(count(a.id),0) counts
-        from sys_order a
+        from pay a
         left join reg_user b
-        on a.reguserid=b.id
+        on a.user_id=b.id
         where 1=1
         <if test="name!=null">
             and b.name like concat('%',#{name},'%')
         </if>
         <if test="createTime!=null">
-            and a.createTime between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
+            and a.created_at between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
         </if>
     </select>
 
 
-    <select id="listSysOrder" parameterType="com.door.match.entity.SysOrder"
-            resultType="com.door.match.entity.SysOrder">
+    <select id="listSysOrder" parameterType="com.door.match.entity.PayPO"
+            resultType="com.door.match.entity.PayPO">
         select
         a.id,
         b.name,
-        a.orderno,
-        a.reguserid,
-        a.createtime,
-        a.pay,
-        a.orderstatus
-        from sys_order a
+        a.pay_no orderno,
+        a.user_id reguserid,
+        a.created_at createtime,
+        a.money pay,
+        a.status orderstatus
+        from pay a
         left join reg_user b
-        on a.reguserid=b.id
+        on a.user_id=b.id
         where 1=1
         <if test="name!=null">
             and b.name like concat('%',#{name},'%')
         </if>
         <if test="createTime!=null">
-            and a.createTime between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
+            and a.created_at between STR_TO_DATE(#{startDateStr},'%Y-%m-%d') and STR_TO_DATE(#{endDateStr},'%Y-%m-%d')
         </if>
         limit #{startNo},#{pageSize}
     </select>
