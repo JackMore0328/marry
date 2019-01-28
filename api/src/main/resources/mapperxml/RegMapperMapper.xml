@@ -72,7 +72,7 @@
             select ru7.id from reg_user ru7
             where ru7.sex != #{sex2}
             <if test="car2 != null and car2 == 0">
-                and ru7.car2=1
+                and ru7.car=1
             </if>
             union ALL
             select ru8.id from reg_user ru8
