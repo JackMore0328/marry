@@ -32,4 +32,7 @@ public interface UpdateMapper {
 
 
     int updateByPrimaryKeySelective(Map<String,Object> paramMap);
+
+    int updateDataOpen(Integer userId);
+
 }

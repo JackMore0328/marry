@@ -317,20 +317,9 @@ public class MiniUpdateService {
             if(WXPayConstants.SUCCESS.equals(strXML.get("return_code"))
                     && WXPayConstants.SUCCESS.equals(strXML.get("result_code"))) {
                 if("SUCCESS".equals(strXML.get("trade_state"))) {
-//                    UserPO user = userMapper.selectByPrimaryKey(pay.getUserId());
-//                    int flag = pay.getFlag();
                     int res = updatePay(strXML, pay.getPayNo());
-                    return res;
-//                    if(2 == flag) { //支付订单
-//                        res = updateOrderStates(user.getCurrentOrder());
-//                        res = updateUser(pay.getUserId(), pay.getMoney());
-//                        if(res > 0) return result;
-//                    }else if(4 == flag) { //充值订单
-//                        res = updateWalletUser(pay.getUserId(), pay.getMoney());
-//                        if(res > 0) return result;
-//                    }else {
-//                        logger.warn("交易类型错误, [out_trade_no:{}, flag:{}]", pay.getPayNo(), flag);
-//                    }
+                    int upt =updateMapper.updateDataOpen(pay.getUserId());
+                    return upt;
                 }
             }
 

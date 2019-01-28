@@ -158,7 +158,7 @@ public class MiniUpdateController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("预支付失败" + e.getLocalizedMessage());
+            log.error("支付状态更新" + e.getLocalizedMessage());
             return new ResultDto<Integer>(ResultDto.CODE_BUZ_ERROR, e.getLocalizedMessage(), null);
         }
     }

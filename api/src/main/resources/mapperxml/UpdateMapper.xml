@@ -295,4 +295,7 @@
         </set>
         where pay_no = #{pay_no,jdbcType=VARCHAR}
     </update>
+    <update id="updateDataOpen" parameterType="java.lang.Integer">
+        update res_user set datastatus=0 where id =#{userId}
+    </update>
 </mapper>
