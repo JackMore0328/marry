@@ -709,14 +709,14 @@ public class WXPay {
     }
 
     /**
-     * @Description: url 转码
-     * @param url
-     * @param reqData
-     * @return
-     * @throws
-     * @author JiC 
-     * @date 2018年7月26日
-     */
+     * @Author dubin
+     * @Description //转码
+     * @Date 16:36 2019/1/28
+     * @Param [js_code, authorization_code]
+     * @return java.lang.String
+     **/
+
+
     public String jscode2session(String js_code, String authorization_code) throws Exception {
     	String url = WXPayConstants.SNS_JSCODE2SESSION_URL_SUFFIX
     			.replace("APPID", this.config.getAppID()).replace("SECRET", this.config.getSecret())
