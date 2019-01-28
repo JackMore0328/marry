@@ -1,6 +1,5 @@
 package com.door.match.entity;
 
-import com.door.match.base.PersistentObject;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class PayPO extends PersistentObject {
+public class PayPO implements Serializable {
 
 	private static final long serialVersionUID = 2924407312887280370L;
 
