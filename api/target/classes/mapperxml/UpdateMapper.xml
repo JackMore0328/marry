@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.door.match.mapper.UpdateMapper">
+    <resultMap id="BaseResultMap" type="PayPO" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+        <result column="transcation_id" property="transcationId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="flag" property="flag" jdbcType="INTEGER" />
+        <result column="way" property="way" jdbcType="INTEGER" />
+        <result column="money" property="money" jdbcType="DECIMAL" />
+        <result column="true_money" property="trueMoney" jdbcType="DECIMAL" />
+        <result column="extra" property="extra" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="notify_at" property="notifyAt" jdbcType="TIMESTAMP" />
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, pay_no, transcation_id, user_id, flag, way, money, true_money, extra, status,
+        notify_at, created_at, updated_at
+     </sql>
+    <sql id="Base_Sql_Where">
+        <where>
+            1=1
+            <if test="id != null">
+                and id=#{id, jdbcType=INTEGER}
+            </if>
+            <if test="user_id != null">
+                and user_id=#{user_id, jdbcType=INTEGER}
+            </if>
+            <if test="flag != null">
+                and flag=#{flag, jdbcType=INTEGER}
+            </if>
+            <if test="way != null">
+                and way=#{way, jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status=#{status, jdbcType=INTEGER}
+            </if>
+            <if test="pay_no != null and pay_no != ''">
+                and pay_no=#{pay_no,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+    <select id="selectByUser" parameterType="string" resultType="ReqData2">
+        SELECT *,age_rank_id as agerankid FROM reg_user LEFT JOIN reg_user_mapping ON reg_user_mapping.reguserid=reg_user.id LEFT JOIN age_rank ON reg_user_mapping.age_rank_id=age_rank.id LEFT JOIN salary_rank AS s1 ON s1.id=reg_user.income LEFT JOIN salary_rank AS s2 ON s2.id=reg_user_mapping.income2 WHERE reg_user.openid=#{openid}
+    </select>
+    <select id="selectUserId" parameterType="string" resultType="long">
+        SELECT id FROM reg_user WHERE openid=#{openid}
+    </select>
+    <update id="updateUser" parameterType="ReqData2" >
+        update reg_user
+         set
+           `name`=#{name },
+           logo=#{logo},
+           birth=#{birth},
+           sex=#{sex},
+           height=#{height},
+           address=#{address},
+           income=#{income},
+           profession=#{profession},
+           education=#{education},
+           married=#{married},
+           house=#{house},
+           car=#{car},
+           datastatus=1
+           where openid=#{openid}
+    </update>
+    <update id="updateUserMapping" parameterType="ReqData2">
+        update reg_user_mapping
+          set
+            contact=#{contact},
+            selfidea=#{selfidea},
+            viewofmarriage=#{viewofmarriage},
+            viewofconsume=#{viewofconsume},
+            viewoffuture=#{viewoffuture},
+            age_rank_id=#{agerankid},
+            heightmi=#{heightmi},
+            heightmx=#{heightmx},
+            address2=#{address2},
+            income2=#{income2},
+            education2=#{education2},
+            married2=#{married2},
+            house2=#{house2},
+            car2=#{car2},
+            datastatus=1
+          where reguserid=#{id}
+    </update>
+    <select id="SelectUserImg" parameterType="long" resultType="UserImg">
+        select id,reg_id as regid,user_img as userimg from reg_user_img where reg_id=#{reg_id} order by id desc limit 5
+    </select>
+    <select id="SelectUserImgByOid" parameterType="ReqData" resultType="UserImg">
+        select id,reg_id as regid,user_img as userimg from reg_user_img where reg_id=(select id from reg_user where openid=#{openid}) order by id desc limit 5
+    </select>
+    <insert id="addImg" parameterType="UserImg">
+        insert into reg_user_img(reg_id,user_img) values (#{regid},#{userimg})
+    </insert>
+    <select id="selectAge" parameterType="string" resultType="integer">
+        select TIMESTAMPDIFF(year,str_to_date(ru.birth, '%Y-%m-%d %H'),now()) age  from reg_user ru WHERE openid=#{openid}
+    </select>
+    <select id="getmapperinfo" parameterType="ReqData" resultType="MapperRecordInfo">
+        select  mr.id,mr.reguserid,mr.mappingid,mr.matchingdegree,rum.address,
+                rum.`name`,rum.sex,rum.car,rum.house,rum.height,rum.education,rumm.contact,rum.married,
+                (select sr1.salary from salary_rank sr1 where sr1.id=rum.income) as salarystring,rumm.income2,
+                rum.logo as img,TIMESTAMPDIFF(year,str_to_date(rum.birth, '%Y-%m-%d %H'),now()) as age,
+                rumm.selfidea,rumm.viewofmarriage,rumm.viewofconsume,rumm.viewoffuture,rumm.age_rank_id as agerankid,
+                (select sr.salary from salary_rank sr where sr.id=rumm.income2) as salarystring2,
+                (select ar.agerank from age_rank ar where ar.id=rumm.age_rank_id) as agestirng,
+                rumm.address2,rumm.education2,rumm.married2,rumm.house2,rumm.car2,rumm.heightmi,rumm.heightmx
+        from mapping_record mr
+        left join reg_user rum on rum.id=mr.mappingid
+        left join reg_user_mapping rumm on rumm.reguserid=rum.id
+        where mr.reguserid=(select ru.id from reg_user ru where ru.openid=#{openid})
+        and mr.id in (select max(mr1.id)from mapping_record mr1 GROUP BY mr1.reguserid,mr1.mappingid)
+        and mr.mappingid=#{mid}
+    </select>
+    <select id="getuserinfo" parameterType="ReqData" resultType="MapperRecordInfo">
+        select rum.address, rum.`name`,rum.sex,rum.car,rum.house,rum.height,rum.education,rumm.contact,rum.married,
+                (select sr1.salary from salary_rank sr1 where sr1.id=rum.income) as salarystring,rumm.income2,
+                rum.logo as img,TIMESTAMPDIFF(year,str_to_date(rum.birth, '%Y-%m-%d %H'),now()) as age,
+                rumm.selfidea,rumm.viewofmarriage,rumm.viewofconsume,rumm.viewoffuture,rumm.age_rank_id as agerankid,
+                (select sr.salary from salary_rank sr where sr.id=rumm.income2) as salarystring2,
+                (select ar.agerank from age_rank ar where ar.id=rumm.age_rank_id) as agestirng,
+                rumm.address2,rumm.education2,rumm.married2,rumm.house2,rumm.car2,rumm.heightmi,rumm.heightmx,
+                concat((select `name` from profession where id =p.parentid ),p.name)as profession,rum.profession as professionid
+        from  reg_user rum
+        left join reg_user_mapping rumm on rumm.reguserid=rum.id
+        left join profession p on p.id = rum.profession
+        where rum.openid=#{openid}
+    </select>
+    <delete id="deletimg" parameterType="ReqData">
+        delete from  reg_user_img  where id=#{imgid}
+    </delete>
+    <select id="partnermacdeg" parameterType="MapperRecordInfo" resultType="java.lang.Integer">
+        select ROUND(count(rr.id)*100/8) as matchingdegree
+        from (
+        select ru1.id from reg_user ru1
+        where ru1.id =#{reguserid} and ru1.sex != #{sex}
+        and ru1.address like CONCAT(#{address2}, '%')
+        union ALL
+        select ru2.id from reg_user ru2
+        where ru2.id =#{reguserid} and ru2.sex != #{sex}
+        and ru2.income = #{income2}
+        union ALL
+        select ru3.id from reg_user ru3
+        where  ru3.id =#{reguserid} and ru3.sex != #{sex}
+        and ru3.birth >(
+            select DATE_FORMAT(DATE_SUB(NOW(), interval (select ar.maxage from age_rank ar where ar.id =#{agerankid})
+            year), "%Y-%m-%d") from dual)
+        and ru3.birth <![CDATA[ < ]]>    (
+            select DATE_FORMAT(DATE_SUB(NOW(), interval (select ar.minage from age_rank ar where ar.id =#{agerankid})
+            year), "%Y-%m-%d") from dual)
+        union ALL
+        select ru4.id from reg_user ru4
+        where  ru4.id =#{reguserid} and ru4.sex != #{sex}
+        <if test="education2!= null and education2 !='不限'">
+            and ru4.education=#{education2}
+        </if>
+        union ALL
+        select ru5.id from reg_user ru5
+        where ru5.id =#{reguserid} and ru5.sex != #{sex}
+        <if test="married2!=null and married2==0">
+            and ru5.married=1
+        </if>
+        union ALL
+        select  ru6.id from reg_user ru6
+        where ru6.id =#{reguserid} and ru6.sex !=#{sex}
+        <if test="house2 != null and house2 == 0">
+            and
+            ru6.house=1
+        </if>
+        union ALL
+        select ru7.id from reg_user ru7
+        where  ru7.id =#{reguserid} and ru7.sex != #{sex}
+        <if test="car2 != null and car2 == 0">
+            and ru7.car2=1
+        </if>
+        union ALL
+        select  ru8.id from reg_user ru8
+        where  ru8.id =#{reguserid} and ru8.sex !=#{sex}
+        and ru8.height >= #{heightmi}
+        and ru8.height <![CDATA[ <= ]]>  #{heightmx}
+        ) rr group by rr.id
+    </select>
+    <insert id="insertSelective" parameterType="PayPO" >
+        insert into pay
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="payNo != null" >
+                pay_no,
+            </if>
+            <if test="transcationId != null" >
+                transcation_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="flag != null" >
+                flag,
+            </if>
+            <if test="way != null" >
+                way,
+            </if>
+            <if test="money != null" >
+                money,
+            </if>
+            <if test="trueMoney != null" >
+                true_money,
+            </if>
+            <if test="extra != null" >
+                extra,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="notifyAt != null" >
+                notify_at,
+            </if>
+            <if test="createdAt != null" >
+                created_at,
+            </if>
+            <if test="updatedAt != null" >
+                updated_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="payNo != null" >
+                #{payNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transcationId != null" >
+                #{transcationId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="flag != null" >
+                #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="way != null" >
+                #{way,jdbcType=INTEGER},
+            </if>
+            <if test="money != null" >
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="trueMoney != null" >
+                #{trueMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="extra != null" >
+                #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notifyAt != null" >
+                #{notifyAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdAt != null" >
+                #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null" >
+                #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectSelectiveOne" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from pay <include refid="Base_Sql_Where" />
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="map" >
+        update pay
+        <set >
+            <if test="transcationId != null" >
+                transcation_id = #{transcationId,jdbcType=VARCHAR},
+            </if>
+            <if test="extra != null" >
+                extra = #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="notifyAt != null" >
+                notify_at = #{notifyAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null" >
+                updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="true_money != null">
+                true_money = #{true_money,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where pay_no = #{pay_no,jdbcType=VARCHAR}
+    </update>
+</mapper>
