@@ -188,4 +188,18 @@ public class OSSClientUtil {
         }
         return null;
     }
+    /**
+     * @Author dubin
+     * @Description //根据key删除文件
+     * @Date 11:55 2019/1/30
+     * @Param [key]
+     * @return java.lang.String
+     **/
+
+
+    public void deletfile(String key) {
+        ossClient.deleteObject(bucketName,key);
+    }
+
+
 }

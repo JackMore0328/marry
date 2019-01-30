@@ -102,10 +102,12 @@ public class MiniUpdateService {
     }
 
     public Integer deletimg(ReqData imgid) {
-
-       int count= updateMapper.deletimg(imgid);
+        UserImg image=updateMapper.getImgById(imgid);
+        String[] split = image.getUserimg().split("/");
+        String[] split1 = split[split.length - 1].split("\\.");
+        ossClientUtil.deletfile(split1[0]);
+        int count= updateMapper.deletimg(imgid);
         if(count>0){
-
             return count;
         }
         return null;
@@ -308,8 +310,10 @@ public class MiniUpdateService {
             paramMap.put("pay_no", outTradeNo);
             PayPO pay = updateMapper.selectSelectiveOne(paramMap);
             Preconditions.checkNotNull(pay, "根据订单号查询订单为空[pay_no:%s]", outTradeNo);
-            if(pay.getStatus().intValue() == 1)
-                return 1;
+            if(pay.getStatus().intValue() == 1&&pay.getUserId()!=null){
+                int upt =updateMapper.updateDataOpen(pay.getUserId());
+                return upt;
+            }
             WXPay wxpay = new WXPay(MyWXPayConfig.apiMCH());
             param.put("out_trade_no", outTradeNo);
             wxpay.fillRequestData(param);
