@@ -62,9 +62,22 @@
     </update>
     <insert id="insertRegUMapByOid" parameterType="ReqData">
         insert into reg_user_mapping(
-        reguserid,contact,selfidea,viewofmarriage,viewofconsume,sex2,
-        viewoffuture,age_rank_id,address2,heightmi,heightmx,
-        income2,education2,married2,house2,car2)
+        reguserid,
+        contact,
+        selfidea,
+        viewofmarriage,
+        viewofconsume,
+        viewoffuture,
+        sex2,
+        age_rank_id,
+        address2,
+        heightmi,
+        heightmx,
+        income2,
+        education2,
+        married2,
+        house2,
+        car2)
         values(
            (select id from reg_user where openid=#{openid}),
            #{contactway},

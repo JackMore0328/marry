@@ -71,6 +71,7 @@
         update reg_user_mapping
           set
             contact=#{contact},
+            sex2=#{sex},
             selfidea=#{selfidea},
             viewofmarriage=#{viewofmarriage},
             viewofconsume=#{viewofconsume},
@@ -132,6 +133,9 @@
     <delete id="deletimg" parameterType="ReqData">
         delete from  reg_user_img  where id=#{imgid}
     </delete>
+    <select id="getImgById" parameterType="ReqData" resultType="UserImg">
+        select id,reg_id as regid,user_img as userimg from  reg_user_img  where id=#{imgid}
+    </select>
     <select id="partnermacdeg" parameterType="MapperRecordInfo" resultType="java.lang.Integer">
         select ROUND(count(rr.id)*100/8) as matchingdegree
         from (
@@ -296,6 +300,6 @@
         where pay_no = #{pay_no,jdbcType=VARCHAR}
     </update>
     <update id="updateDataOpen" parameterType="java.lang.Integer">
-        update res_user set datastatus=0 where id =#{userId}
+        update reg_user set datastatus=0 where id =#{0}
     </update>
 </mapper>

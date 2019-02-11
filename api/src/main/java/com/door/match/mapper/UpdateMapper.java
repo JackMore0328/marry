@@ -35,4 +35,5 @@ public interface UpdateMapper {
 
     int updateDataOpen(Integer userId);
 
+    UserImg getImgById(ReqData imgid);
 }

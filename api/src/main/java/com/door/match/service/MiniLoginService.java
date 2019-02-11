@@ -71,9 +71,13 @@ public class MiniLoginService {
                }
            }else{
                Long umid=regUserMapper.selectRUMByOpenid(openid);
-               if(umid.longValue()>0){
+               if(umid!=null &&umid.longValue()>0){
                    map=new HashMap<String, Object>();
                    map.put("count",umid);
+                   map.put("openid",openid);
+               }else{
+                   map=new HashMap<String, Object>();
+                   map.put("count",0);
                    map.put("openid",openid);
                }
            }
