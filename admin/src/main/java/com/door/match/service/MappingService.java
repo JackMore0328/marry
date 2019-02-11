@@ -24,7 +24,7 @@ public class MappingService {
 
     public List<MappingRecord> findMappingRecordById(Long id) throws BasicException {
         try {
-            log.debug("获取匹配详情，id:" + id);
+            log.info("获取匹配详情，id:" + id);
             return mappingDao.findMappingRecordById(id);
         } catch (Exception e) {
             log.error("获取匹配详情失败，id:" + id, e.getMessage());
@@ -39,6 +39,7 @@ public class MappingService {
      * @throws Exception
      */
     public PageDto<MappingRecord> list(SearcherRequest searcherRequest) throws BasicException {
+        log.info("获取匹配记录");
         MappingRecord obj = new AdminDto<>(new MappingRecord()).transfer(searcherRequest).getBean();
         PageBean<MappingRecord> pageBean = new PageBean<MappingRecord>(obj) {
             @Override
@@ -58,9 +59,9 @@ public class MappingService {
         }
         beanList.forEach(a -> {
             MappingRecord bean = new MappingRecord();
-            bean.setId(a.getRegUserId());
-            long l = mappingDao.countMappingRecord(new MappingRecord());
-            a.setMappingCount(l);
+            bean.setReguserid(a.getReguserid());
+            long l = mappingDao.countMappingRecord(bean);
+            a.setMappingcount(l);
         });
 
         return new PageDto<>(total, beanList);

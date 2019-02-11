@@ -55,6 +55,7 @@ public class CommonService {
                 redis.set("PROFESSION", JSONObject.toJSONString(professions));
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BasicException(ResultDto.CODE_BUZ_ERROR, "预存字典异常");
         }
 

@@ -14,7 +14,7 @@ public interface UserDao {
 
     SysUser findUserByNameAndPassword(SysUser user);
 
-    UserMappingDto findRegUserById(@Param("id") Long id);
+    UserMappingDto findRegUserById(Long id);
 
     List<RegUser> listRegUser(RegUser user);
 

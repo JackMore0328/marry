@@ -27,7 +27,7 @@ public class RegUserController {
      * @param id
      * @return
      */
-    @ValidToken
+    //@ValidToken
     @GetMapping(value = "/detail/{id}")
     public ResultDto<UserMappingDto> detail(@PathVariable Long id) {
         try {

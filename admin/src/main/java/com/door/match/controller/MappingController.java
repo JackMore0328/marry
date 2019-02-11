@@ -40,7 +40,7 @@ public class MappingController {
         }
     }
 
-    @ValidToken
+    //@ValidToken
     @PostMapping("/list")
     public ResultDto<PageDto<MappingRecord>> list(@RequestBody SearcherRequest searcherRequest) {
         try {

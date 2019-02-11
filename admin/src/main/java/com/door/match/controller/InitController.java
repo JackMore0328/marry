@@ -22,8 +22,9 @@ public class InitController implements ApplicationListener<ContextRefreshedEvent
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         try {
-            commonService.initDic();
+            //commonService.initDic();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("初始化字典异常", e);
         }
     }

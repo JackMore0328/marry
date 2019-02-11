@@ -38,7 +38,7 @@ public class SysOrderController {
             return new ResultDto<>(ResultDto.CODE_BUZ_ERROR, e.getMessage(), null);
         }
     }
-    @ValidToken
+    //@ValidToken
     @PostMapping("/list")
     public ResultDto<PageDto<PayPO>> login(@RequestBody SearcherRequest searcherRequest) {
         try {

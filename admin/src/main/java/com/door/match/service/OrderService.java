@@ -7,7 +7,6 @@ import com.door.match.base.SearcherRequest;
 import com.door.match.config.AdminDto;
 import com.door.match.dao.OrderDao;
 import com.door.match.entity.PayPO;
-import com.door.match.entity.SysOrder;
 import com.door.match.exception.BasicException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,7 @@ public class OrderService {
      * @throws Exception
      */
     public PageDto<PayPO> list(SearcherRequest searcherRequest) throws BasicException {
+        log.info("获取订单列表 ");
         PayPO obj = new AdminDto<>(new PayPO()).transfer(searcherRequest).getBean();
         PageBean<PayPO> pageBean = new PageBean<PayPO>(obj) {
             @Override
